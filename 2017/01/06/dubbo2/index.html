@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lty" />
+
+
+
+<meta name="description" content="这两天把dubbo的demo搭建起来了，现在分享给大家,随便给自己备份一下O(∩_∩)O~这个demo用的是zookeeper注册中心，windows没安装的可以参考这篇文章
+创建服务提供方的工程,maven引入依赖12345678910111213141516171819202122232425262728293031323334&amp;lt;properties&amp;gt;     &amp;lt;spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dubbo配置">
+<meta property="og:url" content="https://lty6429.github.io/2017/01/06/dubbo2/index.html">
+<meta property="og:site_name" content="云卷云舒">
+<meta property="og:description" content="这两天把dubbo的demo搭建起来了，现在分享给大家,随便给自己备份一下O(∩_∩)O~这个demo用的是zookeeper注册中心，windows没安装的可以参考这篇文章
+创建服务提供方的工程,maven引入依赖12345678910111213141516171819202122232425262728293031323334&amp;lt;properties&amp;gt;     &amp;lt;spring">
+<meta property="og:updated_time" content="2017-02-08T02:08:32.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dubbo配置">
+<meta name="twitter:description" content="这两天把dubbo的demo搭建起来了，现在分享给大家,随便给自己备份一下O(∩_∩)O~这个demo用的是zookeeper注册中心，windows没安装的可以参考这篇文章
+创建服务提供方的工程,maven引入依赖12345678910111213141516171819202122232425262728293031323334&amp;lt;properties&amp;gt;     &amp;lt;spring">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="云卷云舒" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>dubbo配置 | 云卷云舒</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/my.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lty</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">闲看庭前花开花落</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collection/">Collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/List/">List</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bean/">bean</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/book/">book</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cluster/">cluster</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/convert/">convert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/framework/">framework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper/">mapper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">有些地方可能不是很准确...可以说出来哟，但是不能打我O(∩_∩)O~~~</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lty</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/my.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lty</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">闲看庭前花开花落</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-dubbo2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/06/dubbo2/" class="article-date">
+      <time datetime="2017-01-06T02:17:19.000Z" itemprop="datePublished">2017-01-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      dubbo配置
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dubbo/">dubbo</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>这两天把dubbo的demo搭建起来了，现在分享给大家,随便给自己备份一下O(∩_∩)O~<br>这个demo用的是zookeeper注册中心，windows没安装的可以参考<a href="https://lty6429.github.io/2016/12/23/windows-安装zookeeper/" title="帅吗">这篇文章</a></p>
+<h3 id="创建服务提供方的工程-maven引入依赖"><a href="#创建服务提供方的工程-maven引入依赖" class="headerlink" title="创建服务提供方的工程,maven引入依赖"></a>创建服务提供方的工程,maven引入依赖</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">     &lt;spring.version&gt;4.3.3.RELEASE&lt;/spring.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">     &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;dubbo&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;2.5.3&lt;/version&gt;</div><div class="line">     &lt;/dependency&gt;</div><div class="line">	  </div><div class="line">     &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;com.github.sgroschupf&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;zkclient&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;0.1&lt;/version&gt;</div><div class="line">     &lt;/dependency&gt;</div><div class="line">	  </div><div class="line">     &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.apache.zookeeper&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;zookeeper&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;3.4.9&lt;/version&gt;</div><div class="line">     &lt;/dependency&gt;</div><div class="line">     &lt;!-- Spring相关包 --&gt;</div><div class="line">     &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;$&#123;spring.version&#125;&lt;/version&gt;</div><div class="line">     &lt;/dependency&gt;</div><div class="line">	      </div><div class="line">     &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-core&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;$&#123;spring.version&#125;&lt;/version&gt;</div><div class="line">     &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div></pre></td></tr></table></figure>
+<p>因为要想zookeeper注册中心注册服务，所以依赖zookeeper,zkclient这两个包,spring的话采用最少依赖，因为是一个简单的demo。。</p>
+<h5 id="定义服务接口-该接口需单独打包，在服务提供方和消费方共享"><a href="#定义服务接口-该接口需单独打包，在服务提供方和消费方共享" class="headerlink" title="定义服务接口(该接口需单独打包，在服务提供方和消费方共享)"></a>定义服务接口(该接口需单独打包，在服务提供方和消费方共享)</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> liuziyuan.net.framework.service;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by lty on 2017/1/5.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DubboHelloService</span> </span>&#123;</div><div class="line">    <span class="function">String <span class="title">sayHello</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="在服务提供方实现接口：-对服务消费方隐藏实现"><a href="#在服务提供方实现接口：-对服务消费方隐藏实现" class="headerlink" title="在服务提供方实现接口：(对服务消费方隐藏实现)"></a>在服务提供方实现接口：(对服务消费方隐藏实现)</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> liuziyuan.net.framework.service.impl;</div><div class="line"></div><div class="line"><span class="keyword">import</span> liuziyuan.net.framework.service.DubboHelloService;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by lty on 2017/1/5.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DubboHelloServiceImpl</span> <span class="keyword">implements</span> <span class="title">DubboHelloService</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"dubbo is very nice"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="用Spring配置声明暴露服务："><a href="#用Spring配置声明暴露服务：" class="headerlink" title="用Spring配置声明暴露服务："></a>用Spring配置声明暴露服务：</h5><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</div><div class="line">&lt;beans xmlns="http://www.springframework.org/schema/beans"</div><div class="line">       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</div><div class="line">       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"</div><div class="line">       xsi:schemaLocation="http://www.springframework.org/schema/beans</div><div class="line">        http://www.springframework.org/schema/beans/spring-beans.xsd</div><div class="line">        http://code.alibabatech.com/schema/dubbo</div><div class="line">        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"&gt;</div><div class="line"></div><div class="line">    &lt;dubbo:application name="the-first-dubbo"/&gt;</div><div class="line"></div><div class="line">    &lt;!--zookeeper注册中心 --&gt;</div><div class="line">    &lt;dubbo:registry address="zookeeper://127.0.0.1:2181" /&gt;</div><div class="line"></div><div class="line">    &lt;!-- 用dubbo协议在20880端口暴露服务 --&gt;</div><div class="line">    &lt;dubbo:protocol name="dubbo" port="20880" /&gt;</div><div class="line"></div><div class="line">    &lt;!-- 声明需要暴露的服务接口 --&gt;</div><div class="line">    &lt;dubbo:service interface="liuziyuan.net.framework.service.DubboHelloService" ref="dubboHelloServiceImpl"/&gt;</div><div class="line">    &lt;!-- 和本地bean一样实现服务 --&gt;</div><div class="line">    &lt;bean id="dubboHelloServiceImpl" class="liuziyuan.net.framework.service.impl.DubboHelloServiceImpl"/&gt;</div><div class="line"></div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<p>这里有个小坑,dubbo:service 的ref属性,百度，谷歌的时候有一些文章里面是没有要这个属性的。。<br>其实，这个引用是必须的！！！官方文档上也有。。<br>否则会抛出异常：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Exception in thread <span class="string">"main"</span> java.lang.IllegalStateException: ref not allow <span class="keyword">null</span>!</div><div class="line">   at com.alibaba.dubbo.config.ServiceConfig.checkRef(ServiceConfig.java:<span class="number">248</span>)</div><div class="line">   at com.alibaba.dubbo.config.ServiceConfig.doExport(ServiceConfig.java:<span class="number">203</span>)</div><div class="line">   at com.alibaba.dubbo.config.ServiceConfig.export(ServiceConfig.java:<span class="number">143</span>)</div><div class="line">   at com.alibaba.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:<span class="number">109</span>)</div><div class="line">   at org.springframework.context.event.SimpleApplicationEventMulticaster$<span class="number">1</span>.run(SimpleApplicationEventMulticaster.java:<span class="number">78</span>)</div><div class="line">   at org.springframework.core.task.SyncTaskExecutor.execute(SyncTaskExecutor.java:<span class="number">49</span>)</div><div class="line">   at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:<span class="number">76</span>)</div><div class="line">   at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:<span class="number">274</span>)</div><div class="line">   at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:<span class="number">736</span>)</div><div class="line">   at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:<span class="number">383</span>)</div><div class="line">   at org.springframework.context.support.ClassPathXmlApplicationContext.&lt;init&gt;(ClassPathXmlApplicationContext.java:<span class="number">139</span>)</div><div class="line">   at org.springframework.context.support.ClassPathXmlApplicationContext.&lt;init&gt;(ClassPathXmlApplicationContext.java:<span class="number">93</span>)</div><div class="line">	 </div><div class="line">   ...</div></pre></td></tr></table></figure></p>
+<p>启动服务，加载spring配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> liuziyuan.net.framework.service;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by lty on 2017/1/5.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Provider</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ClassPathXmlApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(</div><div class="line">                <span class="keyword">new</span> String[] &#123; <span class="string">"provider.xml"</span> &#125;);</div><div class="line">        context.start();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"Dubbo provider start..."</span>);</div><div class="line">        System.out.println(<span class="string">"任意键退出"</span>);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            System.in.read();   <span class="comment">// 按任意键退出(使用流在阻塞，保持服务开启状态)</span></div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="创建服务消费方的工程（也可以在一个工程里面玩…）"><a href="#创建服务消费方的工程（也可以在一个工程里面玩…）" class="headerlink" title="创建服务消费方的工程（也可以在一个工程里面玩…）"></a>创建服务消费方的工程（也可以在一个工程里面玩…）</h3><p>maven依赖和服务提供方一样。。</p>
+<h5 id="通过spring配置引用远程服务"><a href="#通过spring配置引用远程服务" class="headerlink" title="通过spring配置引用远程服务"></a>通过spring配置引用远程服务</h5><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</div><div class="line">&lt;beans xmlns="http://www.springframework.org/schema/beans"</div><div class="line">       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</div><div class="line">       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"</div><div class="line">       xsi:schemaLocation="http://www.springframework.org/schema/beans</div><div class="line">        http://www.springframework.org/schema/beans/spring-beans.xsd</div><div class="line">        http://code.alibabatech.com/schema/dubbo</div><div class="line">        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"&gt;</div><div class="line">    &lt;!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样--&gt;</div><div class="line">    &lt;dubbo:application name="consumer-the-first-dubbo"/&gt;</div><div class="line"></div><div class="line">    &lt;!--zookeeper注册中心发现暴露的服务地址 --&gt;</div><div class="line">    &lt;dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" /&gt;</div><div class="line"></div><div class="line">    &lt;!-- 生成远程服务代理，可以和本地bean一样使用dubboHelloServiceImpl --&gt;</div><div class="line">    &lt;dubbo:reference id="dubboHelloServiceImpl" interface="liuziyuan.net.framework.service.DubboHelloService" /&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<p>这里简单的强调一下，dubbo服务提供方的接口是在两端共享的，这里我没有打包就新建了一个一模一样的接口…</p>
+<h5 id="加载spring配置，并调用远程服务"><a href="#加载spring配置，并调用远程服务" class="headerlink" title="加载spring配置，并调用远程服务"></a>加载spring配置，并调用远程服务</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> liuziyuan.net.framework.service;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by lty on 2017/1/5.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ClassPathXmlApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(</div><div class="line">                <span class="keyword">new</span> String[] &#123; <span class="string">"consumer.xml"</span> &#125;);</div><div class="line">        context.start();</div><div class="line">        DubboHelloService dubboHelloService = (DubboHelloService)context.getBean(<span class="string">"dubboHelloServiceImpl"</span>);</div><div class="line">        String str = dubboHelloService.sayHello();</div><div class="line">        System.out.println(str);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>好了，简单的调用已经可以了，到时有时间把注册中心的管理界面给弄出来！！！</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/01/12/web框架理解/">
+                    web框架理解
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/01/03/代理模式/">
+                    代理模式
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建服务提供方的工程-maven引入依赖"><span class="toc-number">1.</span> <span class="toc-text">创建服务提供方的工程,maven引入依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#定义服务接口-该接口需单独打包，在服务提供方和消费方共享"><span class="toc-number">1.0.1.</span> <span class="toc-text">定义服务接口(该接口需单独打包，在服务提供方和消费方共享)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#在服务提供方实现接口：-对服务消费方隐藏实现"><span class="toc-number">1.0.2.</span> <span class="toc-text">在服务提供方实现接口：(对服务消费方隐藏实现)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用Spring配置声明暴露服务："><span class="toc-number">1.0.3.</span> <span class="toc-text">用Spring配置声明暴露服务：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建服务消费方的工程（也可以在一个工程里面玩…）"><span class="toc-number">2.</span> <span class="toc-text">创建服务消费方的工程（也可以在一个工程里面玩…）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#通过spring配置引用远程服务"><span class="toc-number">2.0.1.</span> <span class="toc-text">通过spring配置引用远程服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#加载spring配置，并调用远程服务"><span class="toc-number">2.0.2.</span> <span class="toc-text">加载spring配置，并调用远程服务</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"dubbo配置　| 云卷云舒　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2017/01/06/dubbo2/" data-title="dubbo配置" data-url="https://lty6429.github.io/2017/01/06/dubbo2/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"null"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
+
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/01/12/web框架理解/" title="上一篇: web框架理解">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/01/03/代理模式/" title="下一篇: 代理模式">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/12/web框架理解/">web框架理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/dubbo2/">dubbo配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/03/代理模式/">代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/28/搜罗的书籍/">搜罗了一些书籍，记录一下找机会阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/23/windows-安装zookeeper/">windows 安装zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/dubbo1/">dubbo理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/http协议解释/">http协议解释</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/shiro加密加盐/">shiro加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">spring,springmvc,mybatis,shiro集成5</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">spring,springmvc,mybatis,shiro集成4</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">spring,springmvc,mybatis,shiro集成3</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成2/">spring,springmvc,mybatis,shiro集成2</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成1/">spring,springmvc,mybatis,shiro集成(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/linux安装java/">linux安装java</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/redis命令/">redis命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/redis集群/">redis集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/linux安装redis/">linux下安装redis</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 lty
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

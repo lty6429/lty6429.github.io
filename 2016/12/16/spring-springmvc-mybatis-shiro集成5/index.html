@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lty" />
+
+
+
+<meta name="description" content="ssm已经搭建好啦(O(∩_∩)O~~)现在要往里面加入shiro的配置了
+把shiro生命周期交给spring1&amp;lt;bean id=&quot;lifecycleBeanPostProcessor&quot; class=&quot;org.apache.shiro.spring.LifecycleBeanPostProcessor&quot;/&amp;gt;
+声明 Security Manager单例12345678910111213">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring,springmvc,mybatis,shiro集成5">
+<meta property="og:url" content="https://lty6429.github.io/2016/12/16/spring-springmvc-mybatis-shiro集成5/index.html">
+<meta property="og:site_name" content="云卷云舒">
+<meta property="og:description" content="ssm已经搭建好啦(O(∩_∩)O~~)现在要往里面加入shiro的配置了
+把shiro生命周期交给spring1&amp;lt;bean id=&quot;lifecycleBeanPostProcessor&quot; class=&quot;org.apache.shiro.spring.LifecycleBeanPostProcessor&quot;/&amp;gt;
+声明 Security Manager单例12345678910111213">
+<meta property="og:updated_time" content="2016-12-16T06:44:27.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring,springmvc,mybatis,shiro集成5">
+<meta name="twitter:description" content="ssm已经搭建好啦(O(∩_∩)O~~)现在要往里面加入shiro的配置了
+把shiro生命周期交给spring1&amp;lt;bean id=&quot;lifecycleBeanPostProcessor&quot; class=&quot;org.apache.shiro.spring.LifecycleBeanPostProcessor&quot;/&amp;gt;
+声明 Security Manager单例12345678910111213">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="云卷云舒" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>spring,springmvc,mybatis,shiro集成5 | 云卷云舒</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/my.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lty</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">闲看庭前花开花落</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collection/">Collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/List/">List</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bean/">bean</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/book/">book</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cluster/">cluster</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/convert/">convert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/framework/">framework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper/">mapper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">有些地方可能不是很准确...可以说出来哟，但是不能打我O(∩_∩)O~~~</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lty</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/my.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lty</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">闲看庭前花开花落</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-spring-springmvc-mybatis-shiro集成5" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/" class="article-date">
+      <time datetime="2016-12-16T02:55:35.000Z" itemprop="datePublished">2016-12-16</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      spring,springmvc,mybatis,shiro集成5
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shiro/">shiro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springmvc/">springmvc</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>ssm已经搭建好啦(O(∩_∩)O~~)<br>现在要往里面加入shiro的配置了</p>
+<h3 id="把shiro生命周期交给spring"><a href="#把shiro生命周期交给spring" class="headerlink" title="把shiro生命周期交给spring"></a>把shiro生命周期交给spring</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=<span class="string">"lifecycleBeanPostProcessor"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.apache.shiro.spring.LifecycleBeanPostProcessor"</span>/&gt;</div></pre></td></tr></table></figure>
+<h3 id="声明-Security-Manager单例"><a href="#声明-Security-Manager单例" class="headerlink" title="声明 Security Manager单例"></a>声明 Security Manager单例</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&lt;!-- Security Manager是shiro的核心,有时间介绍一下... --&gt;</div><div class="line">&lt;bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager"&gt; </div><div class="line">	&lt;property name="realm" ref="myRealm"/&gt; &lt;-- 获取角色，权限给securityManager使用(个人理解) --&gt;</div><div class="line">	&lt;property name="cacheManager" ref="cacheManager"/&gt; &lt;!-- 进行Cache机制的配置 --&gt;</div><div class="line">	&lt;property name="sessionManager" ref="sessionManager"/&gt; &lt;!-- 进行Session机制的配置 --&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line"></div><div class="line">	&lt;bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    </div><div class="line">    &lt;bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"&gt;</div><div class="line">        &lt;property name="sessionDAO" ref="sessionDAO"/&gt; &lt;!-- 放入具体实例化的Session的Object --&gt;</div><div class="line">        &lt;property name="sessionValidationScheduler" ref="sessionValidationScheduler"/&gt;&lt;!-- 采用此类进行Session的验证 --&gt;</div><div class="line">        &lt;property name="sessionValidationSchedulerEnabled" value="true"/&gt; &lt;!-- 开放Session验证 --&gt;</div><div class="line">        &lt;property name="sessionIdCookie" ref="sessionIdCookie"/&gt; &lt;!-- 采用该Cookie机制 --&gt;</div><div class="line">        &lt;property name="sessionIdCookieEnabled" value="true"/&gt; &lt;!-- 开放Cookie机制 --&gt;</div><div class="line">        &lt;property name="deleteInvalidSessions" value="true"/&gt; &lt;!-- 删除失效的Session --&gt;</div><div class="line">        &lt;property name="cacheManager" ref="cacheManager"/&gt;  &lt;!-- 采用自定义缓存--&gt;</div><div class="line">        &lt;property name="globalSessionTimeout" value="1800000"/&gt; &lt;!-- session失效时间 --&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    </div><div class="line">    &lt;bean id="sessionGenerate" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/&gt;</div><div class="line">	&lt;!-- session类本身，最主要的存放有sessionId --&gt;</div><div class="line">    &lt;bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO"&gt;</div><div class="line">        &lt;property name="sessionIdGenerator" ref="sessionGenerate"/&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">	&lt;!--完成和Web的Cookie交换--&gt;</div><div class="line">    &lt;bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie"&gt;</div><div class="line">        &lt;property name="httpOnly" value="true"/&gt;</div><div class="line">        &lt;property name="maxAge" value="1800000"/&gt;</div><div class="line">        &lt;property name="name" value="shiroKey"/&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line"></div><div class="line">    &lt;bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler"&gt;</div><div class="line">        &lt;property name="interval" value="1800000"/&gt;</div><div class="line">        &lt;property name="sessionManager" ref="sessionManager"/&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;!-- 获取角色权限...... --&gt;</div><div class="line">    &lt;bean id="myRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm"&gt;</div><div class="line">        &lt;property name="dataSource" ref="dataSource"/&gt;</div><div class="line">        &lt;property name="authenticationQuery" value="SELECT password,salt FROM user WHERE username = ?"/&gt;</div><div class="line">        &lt;property name="userRolesQuery" value="select rolename from role where roleid in (select ur_roleid from user_role where ur_userid in (select userid from user where username = ?))"/&gt;</div><div class="line">        &lt;property name="permissionsQuery" value="select distinct(rname) from resource r inner join permission_resource pr on r.rid = pr.pr_rid</div><div class="line">											  inner join permission p on p.pid = pr.pr_pid</div><div class="line">											  inner join role_permission rp on rp.rp_pid = p.pid</div><div class="line">											  inner join role rle on rle.roleid = rp.rp_roleid</div><div class="line">											  where rle.rolename = ? "/&gt;</div><div class="line">        &lt;property name="permissionsLookupEnabled" value="true"/&gt;</div><div class="line">        &lt;property name="saltStyle" value="COLUMN"/&gt;&lt;!-- 加盐//数据库存在一列 --&gt;</div><div class="line">        &lt;property name="credentialsMatcher" ref="sha512Matcher"/&gt;</div><div class="line">    &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h3 id="shiro过滤器"><a href="#shiro过滤器" class="headerlink" title="shiro过滤器"></a>shiro过滤器</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=<span class="string">"shiroFilter"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.apache.shiro.spring.web.ShiroFilterFactoryBean"</span>&gt;</div><div class="line">	&lt;property name=<span class="string">"securityManager"</span> ref=<span class="string">"securityManager"</span>/&gt; </div><div class="line">	&lt;property name=<span class="string">"loginUrl"</span> value=<span class="string">"/index.jsp"</span>/&gt;&lt;!-- no login --&gt;</div><div class="line">	&lt;property name=<span class="string">"successUrl"</span> value=<span class="string">"/home.jsp"</span>/&gt;&lt;!-- login success --&gt;</div><div class="line">	&lt;property name=<span class="string">"unauthorizedUrl"</span> value=<span class="string">"/503.jsp"</span>/&gt;&lt;!-- no authorization --&gt;</div><div class="line">	&lt;property name=<span class="string">"filterChainDefinitions"</span>&gt;</div><div class="line">	&lt;!-- 过滤规则 --&gt;</div><div class="line">		&lt;value&gt;</div><div class="line">		/user/login**= anon</div><div class="line">		   /user/insert**= anon</div><div class="line">		   /user/select= authc,perms[user:read]</div><div class="line">		   /user/index= authc,perms[admin]</div><div class="line">		   <span class="comment">/** = authc</span></div><div class="line">		&lt;/value&gt;</div><div class="line">	&lt;/property&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>到了这一步了，在web.xml加一个过滤器就ok了，当然<br>如果需要用shiro的注解则要在<em>springmvc</em>的配置文件加一段<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"&gt;</div><div class="line">	&lt;property name="proxyTargetClass" value="true"/&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line">&lt;bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor"&gt;</div><div class="line">	&lt;property name="securityManager" ref="securityManager"/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="web-xml加一个过滤器就"><a href="#web-xml加一个过滤器就" class="headerlink" title="web.xml加一个过滤器就"></a>web.xml加一个过滤器就</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;filter&gt;</div><div class="line">	&lt;filter-name&gt;shiroFilter&lt;/filter-name&gt;</div><div class="line">	&lt;filter-class&gt;org.springframework.web.filter.DelegatingFilterProxy&lt;/filter-class&gt;</div><div class="line">	&lt;init-param&gt;</div><div class="line">		&lt;param-name&gt;targetFilterLifecycle&lt;/param-name&gt;</div><div class="line">		&lt;param-value&gt;true&lt;/param-value&gt;</div><div class="line">	&lt;/init-param&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">	&lt;filter-name&gt;shiroFilter&lt;/filter-name&gt;</div><div class="line">	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+<h3 id="关于shiro过滤规则"><a href="#关于shiro过滤规则" class="headerlink" title="关于shiro过滤规则"></a>关于shiro过滤规则</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">过滤器名称</th>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">对应的Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">anon</td>
+<td style="text-align:center">允许匿名访问</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authc.AnonymousFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">authc</td>
+<td style="text-align:center">需要登陆访问</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authc.FormAuthenticationFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">authcBasic</td>
+<td style="text-align:center">需要登陆访问</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">logout</td>
+<td style="text-align:center">登出</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authc.LogoutFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">noSessionCreation</td>
+<td style="text-align:center">访问时不创建Session</td>
+<td style="text-align:center">org.apache.shiro.web.filter.session.NoSessionCreationFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">perms</td>
+<td style="text-align:center">需要权限</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">port</td>
+<td style="text-align:center">需要端口</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authz.PortFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">rest</td>
+<td style="text-align:center">不明</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">roles</td>
+<td style="text-align:center">需要角色</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authz.RolesAuthorizationFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">ssl</td>
+<td style="text-align:center">需要SSL访问</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authz.SslFilter</td>
+</tr>
+<tr>
+<td style="text-align:center">user</td>
+<td style="text-align:center">需要用户</td>
+<td style="text-align:center">org.apache.shiro.web.filter.authc.UserFilter</td>
+</tr>
+</tbody>
+</table>
+<p>这些文章都是自己整理得笔记，O(∩_∩)O哈哈~，要看原文，请单击传送门</p>
+<p>一个神奇的<a href="http://alanli7991.github.io/2016/08/13/Shiro%E7%9A%84%E7%AE%80%E4%BB%8B%E5%92%8C%E4%B8%8ESpring%E9%9B%86%E6%88%90/" title="我帅吗^_^" target="_blank" rel="external">传送门</a> &lt;==我朋友（大帅哥哟）写的</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/12/16/shiro加密加盐/">
+                    shiro加密
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">
+                    spring,springmvc,mybatis,shiro集成4
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#把shiro生命周期交给spring"><span class="toc-number">1.</span> <span class="toc-text">把shiro生命周期交给spring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#声明-Security-Manager单例"><span class="toc-number">2.</span> <span class="toc-text">声明 Security Manager单例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shiro过滤器"><span class="toc-number">3.</span> <span class="toc-text">shiro过滤器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web-xml加一个过滤器就"><span class="toc-number">4.</span> <span class="toc-text">web.xml加一个过滤器就</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于shiro过滤规则"><span class="toc-number">5.</span> <span class="toc-text">关于shiro过滤规则</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"spring,springmvc,mybatis,shiro集成5　| 云卷云舒　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2016/12/16/spring-springmvc-mybatis-shiro集成5/" data-title="spring,springmvc,mybatis,shiro集成5" data-url="https://lty6429.github.io/2016/12/16/spring-springmvc-mybatis-shiro集成5/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"null"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
+
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/12/16/shiro加密加盐/" title="上一篇: shiro加密">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/" title="下一篇: spring,springmvc,mybatis,shiro集成4">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/12/web框架理解/">web框架理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/dubbo2/">dubbo配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/03/代理模式/">代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/28/搜罗的书籍/">搜罗了一些书籍，记录一下找机会阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/23/windows-安装zookeeper/">windows 安装zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/dubbo1/">dubbo理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/http协议解释/">http协议解释</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/shiro加密加盐/">shiro加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">spring,springmvc,mybatis,shiro集成5</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">spring,springmvc,mybatis,shiro集成4</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">spring,springmvc,mybatis,shiro集成3</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成2/">spring,springmvc,mybatis,shiro集成2</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成1/">spring,springmvc,mybatis,shiro集成(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/linux安装java/">linux安装java</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/redis命令/">redis命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/redis集群/">redis集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/linux安装redis/">linux下安装redis</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 lty
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

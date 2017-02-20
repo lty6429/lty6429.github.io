@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lty" />
+
+
+
+<meta name="description" content="前面的步骤已经搭建好一个ssm框架了，可以跑了哟,等等-_-!，web.xml还差点东西
+springIOC容器12345678&amp;lt;context-param&amp;gt;	&amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt;	&amp;lt;param-value&amp;gt;classpath:spring/applicationContext.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring,springmvc,mybatis,shiro集成4">
+<meta property="og:url" content="https://lty6429.github.io/2016/12/16/spring-springmvc-mybatis-shiro集成4/index.html">
+<meta property="og:site_name" content="云卷云舒">
+<meta property="og:description" content="前面的步骤已经搭建好一个ssm框架了，可以跑了哟,等等-_-!，web.xml还差点东西
+springIOC容器12345678&amp;lt;context-param&amp;gt;	&amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt;	&amp;lt;param-value&amp;gt;classpath:spring/applicationContext.">
+<meta property="og:updated_time" content="2016-12-16T02:53:14.547Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring,springmvc,mybatis,shiro集成4">
+<meta name="twitter:description" content="前面的步骤已经搭建好一个ssm框架了，可以跑了哟,等等-_-!，web.xml还差点东西
+springIOC容器12345678&amp;lt;context-param&amp;gt;	&amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt;	&amp;lt;param-value&amp;gt;classpath:spring/applicationContext.">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="云卷云舒" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>spring,springmvc,mybatis,shiro集成4 | 云卷云舒</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/my.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lty</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">闲看庭前花开花落</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collection/">Collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/List/">List</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bean/">bean</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/book/">book</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cluster/">cluster</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/convert/">convert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/framework/">framework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper/">mapper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">有些地方可能不是很准确...可以说出来哟，但是不能打我O(∩_∩)O~~~</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lty</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/my.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lty</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">闲看庭前花开花落</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-spring-springmvc-mybatis-shiro集成4" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/" class="article-date">
+      <time datetime="2016-12-16T02:35:14.000Z" itemprop="datePublished">2016-12-16</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      spring,springmvc,mybatis,shiro集成4
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shiro/">shiro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springmvc/">springmvc</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>前面的步骤已经搭建好一个ssm框架了，可以跑了哟,等等-_-!，web.xml还差点东西</p>
+<h3 id="springIOC容器"><a href="#springIOC容器" class="headerlink" title="springIOC容器"></a>springIOC容器</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;context-param&gt;</div><div class="line">	&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">	&lt;param-value&gt;classpath:spring/applicationContext.xml&lt;/param-value&gt;</div><div class="line">&lt;/context-param&gt;</div><div class="line"></div><div class="line">&lt;listener&gt;</div><div class="line">	&lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;</div><div class="line">&lt;/listener&gt;</div></pre></td></tr></table></figure>
+<h3 id="springmvc核心Servlet"><a href="#springmvc核心Servlet" class="headerlink" title="springmvc核心Servlet"></a>springmvc核心Servlet</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;servlet&gt;</div><div class="line">	&lt;servlet-name&gt;springMvc&lt;/servlet-name&gt;</div><div class="line">	&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</div><div class="line">	&lt;init-param&gt;</div><div class="line">		&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">		&lt;param-value&gt;classpath:springmvc/spring-mvc.xml&lt;/param-value&gt;</div><div class="line">	&lt;/init-param&gt;</div><div class="line">	&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">&lt;/servlet&gt;</div><div class="line">&lt;servlet-mapping&gt;</div><div class="line">	&lt;servlet-name&gt;springMvc&lt;/servlet-name&gt;</div><div class="line">	&lt;url-pattern&gt;/&lt;/url-pattern&gt;</div><div class="line">&lt;/servlet-mapping&gt;</div></pre></td></tr></table></figure>
+<h3 id="字符过滤器"><a href="#字符过滤器" class="headerlink" title="字符过滤器"></a>字符过滤器</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;filter&gt;</div><div class="line">	&lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">	&lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">	&lt;init-param&gt;</div><div class="line">		&lt;param-name&gt;encoding&lt;/param-name&gt;</div><div class="line">		&lt;param-value&gt;UTF-8&lt;/param-value&gt;</div><div class="line">	&lt;/init-param&gt;</div><div class="line">	&lt;init-param&gt;</div><div class="line">		&lt;param-name&gt;forceEncoding&lt;/param-name&gt;</div><div class="line">		&lt;param-value&gt;true&lt;/param-value&gt;</div><div class="line">	&lt;/init-param&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line"></div><div class="line">&lt;filter-mapping&gt;</div><div class="line">	&lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">	&lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">	&lt;url-pattern&gt;*.jsp&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+<p>摆放的顺序有讲究的哟，自己注意一下<br>到这里，一个ssm已经可以跑了。。试试看，卧槽真可以。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">
+                    spring,springmvc,mybatis,shiro集成5
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">
+                    spring,springmvc,mybatis,shiro集成3
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#springIOC容器"><span class="toc-number">1.</span> <span class="toc-text">springIOC容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#springmvc核心Servlet"><span class="toc-number">2.</span> <span class="toc-text">springmvc核心Servlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符过滤器"><span class="toc-number">3.</span> <span class="toc-text">字符过滤器</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"spring,springmvc,mybatis,shiro集成4　| 云卷云舒　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2016/12/16/spring-springmvc-mybatis-shiro集成4/" data-title="spring,springmvc,mybatis,shiro集成4" data-url="https://lty6429.github.io/2016/12/16/spring-springmvc-mybatis-shiro集成4/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"null"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
+
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/" title="上一篇: spring,springmvc,mybatis,shiro集成5">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/" title="下一篇: spring,springmvc,mybatis,shiro集成3">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/12/web框架理解/">web框架理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/dubbo2/">dubbo配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/03/代理模式/">代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/28/搜罗的书籍/">搜罗了一些书籍，记录一下找机会阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/23/windows-安装zookeeper/">windows 安装zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/dubbo1/">dubbo理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/http协议解释/">http协议解释</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/shiro加密加盐/">shiro加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">spring,springmvc,mybatis,shiro集成5</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">spring,springmvc,mybatis,shiro集成4</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">spring,springmvc,mybatis,shiro集成3</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成2/">spring,springmvc,mybatis,shiro集成2</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成1/">spring,springmvc,mybatis,shiro集成(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/linux安装java/">linux安装java</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/redis命令/">redis命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/redis集群/">redis集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/linux安装redis/">linux下安装redis</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 lty
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

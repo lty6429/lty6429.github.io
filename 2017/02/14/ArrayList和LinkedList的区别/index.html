@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lty" />
+
+
+
+<meta name="description" content="这几天看了一下ArrayList和LinkedList的源码,简单记录一下他们两个的区别吧..
+ArrayList首先ArrayList是已数组的方式存值的1transient Object[] elementData;
+数组存储值的方式对于查询来说效率还是可以的，所以一般查询用得多的话可以考虑用ArrayList.不过删除效率就要慢很多了，看下代码1234567891011121314publi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArrayList和LinkedList的区别">
+<meta property="og:url" content="https://lty6429.github.io/2017/02/14/ArrayList和LinkedList的区别/index.html">
+<meta property="og:site_name" content="云卷云舒">
+<meta property="og:description" content="这几天看了一下ArrayList和LinkedList的源码,简单记录一下他们两个的区别吧..
+ArrayList首先ArrayList是已数组的方式存值的1transient Object[] elementData;
+数组存储值的方式对于查询来说效率还是可以的，所以一般查询用得多的话可以考虑用ArrayList.不过删除效率就要慢很多了，看下代码1234567891011121314publi">
+<meta property="og:updated_time" content="2017-02-14T09:26:25.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ArrayList和LinkedList的区别">
+<meta name="twitter:description" content="这几天看了一下ArrayList和LinkedList的源码,简单记录一下他们两个的区别吧..
+ArrayList首先ArrayList是已数组的方式存值的1transient Object[] elementData;
+数组存储值的方式对于查询来说效率还是可以的，所以一般查询用得多的话可以考虑用ArrayList.不过删除效率就要慢很多了，看下代码1234567891011121314publi">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="云卷云舒" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>ArrayList和LinkedList的区别 | 云卷云舒</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/my.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lty</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">闲看庭前花开花落</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collection/">Collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/List/">List</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bean/">bean</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/book/">book</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cluster/">cluster</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/convert/">convert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/framework/">framework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper/">mapper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">有些地方可能不是很准确...可以说出来哟，但是不能打我O(∩_∩)O~~~</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lty</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/my.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lty</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">闲看庭前花开花落</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-ArrayList和LinkedList的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/14/ArrayList和LinkedList的区别/" class="article-date">
+      <time datetime="2017-02-14T08:11:55.000Z" itemprop="datePublished">2017-02-14</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ArrayList和LinkedList的区别
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Collection/">Collection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/List/">List</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>这几天看了一下ArrayList和LinkedList的源码,简单记录一下他们两个的区别吧..</p>
+<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p>首先ArrayList是已数组的方式存值的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">transient Object[] elementData;</div></pre></td></tr></table></figure></p>
+<p>数组存储值的方式对于查询来说效率还是可以的，所以一般查询用得多的话可以考虑用ArrayList.<br>不过删除效率就要慢很多了，看下代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">       rangeCheck(index);</div><div class="line"></div><div class="line">       modCount++;</div><div class="line">       E oldValue = elementData(index);</div><div class="line"></div><div class="line">       <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</div><div class="line">       <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</div><div class="line">           System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</div><div class="line">                            numMoved);</div><div class="line">       elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></div><div class="line"></div><div class="line">       <span class="keyword">return</span> oldValue;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>代码不难看懂，这里利用System.arraycopy方法copy一次数组覆盖掉要删除的索引（把所有元素从索引位置前移一次，最后一个元素还在那里，后来被至空），<br>在把最后一个元素至空，利用这样的手段来删除元素<br>System.arraycopy(Object src,  int srcPos,Object dest, int destPos,int length)方法参数：</p>
+<ul>
+<li>src:源数组</li>
+<li>srcPos:原数组的起始位置</li>
+<li>dest:目标数组</li>
+<li>destPos：目标数组起始位置</li>
+<li>length：copy的长度</li>
+</ul>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>LinkedList是用双向链表的方式存储的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Pointer to first node.</div><div class="line"> * Invariant: (first == null &amp;&amp; last == null) ||</div><div class="line"> *            (first.prev == null &amp;&amp; first.item != null)</div><div class="line"> */</div><div class="line"><span class="keyword">transient</span> Node&lt;E&gt; first;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Pointer to last node.</div><div class="line"> * Invariant: (first == null &amp;&amp; last == null) ||</div><div class="line"> *            (last.next == null &amp;&amp; last.item != null)</div><div class="line"> */</div><div class="line"><span class="keyword">transient</span> Node&lt;E&gt; last;</div></pre></td></tr></table></figure></p>
+<p>LinkedList是采用Node对象的方式存一个元素，从Node这个类可以看出，他会记录该元素的前一个Node和后一个Node<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">       E item;</div><div class="line">       Node&lt;E&gt; next;</div><div class="line">       Node&lt;E&gt; prev;</div><div class="line"></div><div class="line">       Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</div><div class="line">           <span class="keyword">this</span>.item = element;</div><div class="line">           <span class="keyword">this</span>.next = next;</div><div class="line">           <span class="keyword">this</span>.prev = prev;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>所以说它是采用双向链表的方式存储值的,看下它的添加的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Links e as first element.</div><div class="line"> */</div><div class="line">private void linkFirst(E e) &#123;</div><div class="line">    final Node&lt;E&gt; f = first;</div><div class="line">    final Node&lt;E&gt; newNode = new Node&lt;&gt;(null, e, f);</div><div class="line">    first = newNode;</div><div class="line">    if (f == null)</div><div class="line">        last = newNode;</div><div class="line">    else</div><div class="line">        f.prev = newNode;</div><div class="line">    size++;</div><div class="line">    modCount++;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码也不是很难看懂吧。添加一个元素作为第一个，原来的第一个值用f接收了，然后新建一个Node记录本身，把原来的第一个值放在本身的next位置作为下一个值，然后f.prev记录了这个新的值,此次添加操作<font color="red">只创建了一个对象改变了原来指向元素的位置</font>所以添加速度较快<br><em>ps:其他的添加方法都大同小异，有兴趣的自己去瞧瞧吧</em></p>
+<h5 id="LinkedList的删除"><a href="#LinkedList的删除" class="headerlink" title="LinkedList的删除"></a>LinkedList的删除</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Unlinks non-null first node f.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">private</span> E <span class="title">unlinkFirst</span><span class="params">(Node&lt;E&gt; f)</span> </span>&#123;</div><div class="line">    <span class="comment">// assert f == first &amp;&amp; f != null;</span></div><div class="line">    <span class="keyword">final</span> E element = f.item;</div><div class="line">    <span class="keyword">final</span> Node&lt;E&gt; next = f.next;</div><div class="line">    f.item = <span class="keyword">null</span>;</div><div class="line">    f.next = <span class="keyword">null</span>; <span class="comment">// help GC</span></div><div class="line">    first = next;</div><div class="line">    <span class="keyword">if</span> (next == <span class="keyword">null</span>)</div><div class="line">        last = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">else</span></div><div class="line">        next.prev = <span class="keyword">null</span>;</div><div class="line">    size--;</div><div class="line">    modCount++;</div><div class="line">    <span class="keyword">return</span> element;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码的意思就是至空本身和<em>本身记录</em>的下一个值，然后下个元素的前一项至空（此方法用来移除第一项值的），这样的移除方法只是至空几次，改变一下元素指向，故效率比ArrayList要高<br><em>ps:其他的删除方法都大同小异，有兴趣的自己去瞧瞧吧</em></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>ArrayList查询效率比LinkedList要高，LinkedList添加删除效率比ArrayList要高，看了下源码发现他们两的区别真是太大了。。。(以上观点只是个人见解，如有写错的地方。。你又不能打我= =！)</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/02/16/数据库存储IPv4/">
+                    数据库存储IPv4
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/02/08/动态获取spring管理的bean/">
+                    动态获取spring管理的bean
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayList"><span class="toc-number">1.</span> <span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedList"><span class="toc-number">2.</span> <span class="toc-text">LinkedList</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#LinkedList的删除"><span class="toc-number">2.0.1.</span> <span class="toc-text">LinkedList的删除</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"ArrayList和LinkedList的区别　| 云卷云舒　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2017/02/14/ArrayList和LinkedList的区别/" data-title="ArrayList和LinkedList的区别" data-url="https://lty6429.github.io/2017/02/14/ArrayList和LinkedList的区别/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"null"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
+
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/02/16/数据库存储IPv4/" title="上一篇: 数据库存储IPv4">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/02/08/动态获取spring管理的bean/" title="下一篇: 动态获取spring管理的bean">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/12/web框架理解/">web框架理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/dubbo2/">dubbo配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/03/代理模式/">代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/28/搜罗的书籍/">搜罗了一些书籍，记录一下找机会阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/23/windows-安装zookeeper/">windows 安装zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/dubbo1/">dubbo理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/http协议解释/">http协议解释</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/shiro加密加盐/">shiro加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">spring,springmvc,mybatis,shiro集成5</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">spring,springmvc,mybatis,shiro集成4</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">spring,springmvc,mybatis,shiro集成3</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成2/">spring,springmvc,mybatis,shiro集成2</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成1/">spring,springmvc,mybatis,shiro集成(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/linux安装java/">linux安装java</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/redis命令/">redis命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/redis集群/">redis集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/linux安装redis/">linux下安装redis</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 lty
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

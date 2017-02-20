@@ -14,19 +14,20 @@
 <meta name="author" content="lty" />
 
 
-    
-    
 
-
-<meta name="description" content="my shuai">
-<meta property="og:type" content="website">
-<meta property="og:title" content="云卷云舒">
-<meta property="og:url" content="https://lty6429.github.io/index.html">
+<meta name="description" content="前面一段时间把黄勇的书看了一遍，自己敲了一个简单的web框架记录一下这个web framework框架的执行流程，WebFramework简称Web框架,比较知名的比如Spring,其主要是通过技术手段管理模块中的类的生命周期,更加有效的管理内存
+入口首先，整个框架的入口放在DispatcherServlet重写Servlet的init函数用来初始化，通过类加载工具，HelpLoad初始化一系列的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web框架理解">
+<meta property="og:url" content="https://lty6429.github.io/2017/01/12/web框架理解/index.html">
 <meta property="og:site_name" content="云卷云舒">
-<meta property="og:description" content="my shuai">
+<meta property="og:description" content="前面一段时间把黄勇的书看了一遍，自己敲了一个简单的web框架记录一下这个web framework框架的执行流程，WebFramework简称Web框架,比较知名的比如Spring,其主要是通过技术手段管理模块中的类的生命周期,更加有效的管理内存
+入口首先，整个框架的入口放在DispatcherServlet重写Servlet的init函数用来初始化，通过类加载工具，HelpLoad初始化一系列的">
+<meta property="og:updated_time" content="2017-01-12T06:16:41.709Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="云卷云舒">
-<meta name="twitter:description" content="my shuai">
+<meta name="twitter:title" content="web框架理解">
+<meta name="twitter:description" content="前面一段时间把黄勇的书看了一遍，自己敲了一个简单的web框架记录一下这个web framework框架的执行流程，WebFramework简称Web框架,比较知名的比如Spring,其主要是通过技术手段管理模块中的类的生命周期,更加有效的管理内存
+入口首先，整个框架的入口放在DispatcherServlet重写Servlet的init函数用来初始化，通过类加载工具，HelpLoad初始化一系列的">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -56,7 +57,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>云卷云舒</title>
+<title>web框架理解 | 云卷云舒</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -65,8 +66,8 @@
     var yiliaConfig = {
         fancybox: true,
         animate: false,
-        isHome: true,
-        isPost: false,
+        isHome: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -252,276 +253,7 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-数据库存储IPv4" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/02/16/数据库存储IPv4/" class="article-date">
-      <time datetime="2017-02-16T05:47:07.000Z" itemprop="datePublished">2017-02-16</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>IPv4可以用两种形式存储在数据库，一种似乎String类型，如：127.0.0.1，一种则是转化成long类型，为啥要用long类型？因为255.255.255.255转化出来的值为<strong><em>4294967295。</em></strong>而int类型存储的最大值为<strong><em>2147483647。</em></strong>所以数据库要用BIGINT类型</p>
-<h3 id="String到long转换"><a href="#String到long转换" class="headerlink" title="String到long转换"></a>String到long转换</h3><p>因为java官方库中没有提供转换工具，所以需要自己手动写一个。。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">StringIPv4ToLong</span><span class="params">(String addr)</span></span>&#123;</div><div class="line">       String[] addrArray = addr.split(<span class="string">"\\."</span>);</div><div class="line">       <span class="keyword">long</span> num = <span class="number">0</span>;</div><div class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; addrArray.length; i++)&#123;</div><div class="line">           <span class="keyword">int</span> power = <span class="number">3</span> - i;</div><div class="line">           num += (Integer.parseInt(addrArray[i])%<span class="number">256</span> * Math.pow(<span class="number">256</span>,power));</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> num;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
-<h3 id="long到String类型"><a href="#long到String类型" class="headerlink" title="long到String类型"></a>long到String类型</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">integerToStringIPv4</span><span class="params">(<span class="keyword">long</span> ip)</span> </span>&#123;</div><div class="line">       <span class="keyword">return</span> ((ip &gt;&gt; <span class="number">24</span> ) &amp; <span class="number">0xFF</span>) + <span class="string">"."</span> +</div><div class="line">               ((ip &gt;&gt; <span class="number">16</span> ) &amp; <span class="number">0xFF</span>) + <span class="string">"."</span> +</div><div class="line">               ((ip &gt;&gt;  <span class="number">8</span> ) &amp; <span class="number">0xFF</span>) + <span class="string">"."</span> +</div><div class="line">               ( ip        &amp; <span class="number">0xFF</span>);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/convert/">convert</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ip/">ip</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-ArrayList和LinkedList的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/02/14/ArrayList和LinkedList的区别/" class="article-date">
-      <time datetime="2017-02-14T08:11:55.000Z" itemprop="datePublished">2017-02-14</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>这几天看了一下ArrayList和LinkedList的源码,简单记录一下他们两个的区别吧..</p>
-<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p>首先ArrayList是已数组的方式存值的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">transient Object[] elementData;</div></pre></td></tr></table></figure></p>
-<p>数组存储值的方式对于查询来说效率还是可以的，所以一般查询用得多的话可以考虑用ArrayList.<br>不过删除效率就要慢很多了，看下代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">       rangeCheck(index);</div><div class="line"></div><div class="line">       modCount++;</div><div class="line">       E oldValue = elementData(index);</div><div class="line"></div><div class="line">       <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</div><div class="line">       <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</div><div class="line">           System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</div><div class="line">                            numMoved);</div><div class="line">       elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></div><div class="line"></div><div class="line">       <span class="keyword">return</span> oldValue;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
-<p>代码不难看懂，这里利用System.arraycopy方法copy一次数组覆盖掉要删除的索引（把所有元素从索引位置前移一次，最后一个元素还在那里，后来被至空），<br>在把最后一个元素至空，利用这样的手段来删除元素<br>System.arraycopy(Object src,  int srcPos,Object dest, int destPos,int length)方法参数：</p>
-<ul>
-<li>src:源数组</li>
-<li>srcPos:原数组的起始位置</li>
-<li>dest:目标数组</li>
-<li>destPos：目标数组起始位置</li>
-<li>length：copy的长度</li>
-</ul>
-<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>LinkedList是用双向链表的方式存储的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Pointer to first node.</div><div class="line"> * Invariant: (first == null &amp;&amp; last == null) ||</div><div class="line"> *            (first.prev == null &amp;&amp; first.item != null)</div><div class="line"> */</div><div class="line"><span class="keyword">transient</span> Node&lt;E&gt; first;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Pointer to last node.</div><div class="line"> * Invariant: (first == null &amp;&amp; last == null) ||</div><div class="line"> *            (last.next == null &amp;&amp; last.item != null)</div><div class="line"> */</div><div class="line"><span class="keyword">transient</span> Node&lt;E&gt; last;</div></pre></td></tr></table></figure></p>
-<p>LinkedList是采用Node对象的方式存一个元素，从Node这个类可以看出，他会记录该元素的前一个Node和后一个Node<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">       E item;</div><div class="line">       Node&lt;E&gt; next;</div><div class="line">       Node&lt;E&gt; prev;</div><div class="line"></div><div class="line">       Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</div><div class="line">           <span class="keyword">this</span>.item = element;</div><div class="line">           <span class="keyword">this</span>.next = next;</div><div class="line">           <span class="keyword">this</span>.prev = prev;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
-<p>所以说它是采用双向链表的方式存储值的,看下它的添加的方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Links e as first element.</div><div class="line"> */</div><div class="line">private void linkFirst(E e) &#123;</div><div class="line">    final Node&lt;E&gt; f = first;</div><div class="line">    final Node&lt;E&gt; newNode = new Node&lt;&gt;(null, e, f);</div><div class="line">    first = newNode;</div><div class="line">    if (f == null)</div><div class="line">        last = newNode;</div><div class="line">    else</div><div class="line">        f.prev = newNode;</div><div class="line">    size++;</div><div class="line">    modCount++;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这段代码也不是很难看懂吧。添加一个元素作为第一个，原来的第一个值用f接收了，然后新建一个Node记录本身，把原来的第一个值放在本身的next位置作为下一个值，然后f.prev记录了这个新的值,此次添加操作<font color="red">只创建了一个对象改变了原来指向元素的位置</font>所以添加速度较快<br><em>ps:其他的添加方法都大同小异，有兴趣的自己去瞧瞧吧</em></p>
-<h5 id="LinkedList的删除"><a href="#LinkedList的删除" class="headerlink" title="LinkedList的删除"></a>LinkedList的删除</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Unlinks non-null first node f.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">private</span> E <span class="title">unlinkFirst</span><span class="params">(Node&lt;E&gt; f)</span> </span>&#123;</div><div class="line">    <span class="comment">// assert f == first &amp;&amp; f != null;</span></div><div class="line">    <span class="keyword">final</span> E element = f.item;</div><div class="line">    <span class="keyword">final</span> Node&lt;E&gt; next = f.next;</div><div class="line">    f.item = <span class="keyword">null</span>;</div><div class="line">    f.next = <span class="keyword">null</span>; <span class="comment">// help GC</span></div><div class="line">    first = next;</div><div class="line">    <span class="keyword">if</span> (next == <span class="keyword">null</span>)</div><div class="line">        last = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">else</span></div><div class="line">        next.prev = <span class="keyword">null</span>;</div><div class="line">    size--;</div><div class="line">    modCount++;</div><div class="line">    <span class="keyword">return</span> element;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这段代码的意思就是至空本身和<em>本身记录</em>的下一个值，然后下个元素的前一项至空（此方法用来移除第一项值的），这样的移除方法只是至空几次，改变一下元素指向，故效率比ArrayList要高<br><em>ps:其他的删除方法都大同小异，有兴趣的自己去瞧瞧吧</em></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>ArrayList查询效率比LinkedList要高，LinkedList添加删除效率比ArrayList要高，看了下源码发现他们两的区别真是太大了。。。(以上观点只是个人见解，如有写错的地方。。你又不能打我= =！)</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Collection/">Collection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/List/">List</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-动态获取spring管理的bean" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/02/08/动态获取spring管理的bean/" class="article-date">
-      <time datetime="2017-02-08T03:22:03.000Z" itemprop="datePublished">2017-02-08</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>众所周知，Spring框架将DI模式发挥到了极至，因此，系统里面用Spring管理的Bean相互之间的获取是非常方便的<br>有时候程序中需要动态的根据Bean的id来获取Bean实例…我在程序中就遇到了^_^<br>这时候就需要一种优雅的方法来获取spring管理的bean了。</p>
-<h3 id="实现spring自带的依赖注入的接口org-springframework-context-ApplicationContextAware"><a href="#实现spring自带的依赖注入的接口org-springframework-context-ApplicationContextAware" class="headerlink" title="实现spring自带的依赖注入的接口org.springframework.context.ApplicationContextAware"></a>实现spring自带的依赖注入的接口org.springframework.context.ApplicationContextAware</h3><p>重写setApplicationContext方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">private static ApplicationContext applicationContext;</div><div class="line"></div><div class="line">   @Override</div><div class="line">   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException &#123;</div><div class="line">       ApplicationContextUtil.applicationContext = applicationContext;</div><div class="line">   &#125;</div><div class="line"> </div><div class="line">  /** </div><div class="line">    * 获取ApplicationContext</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static ApplicationContext getApplicationContext()&#123;</div><div class="line">       return applicationContext;</div><div class="line">   &#125;</div><div class="line"> </div><div class="line">  /**</div><div class="line">    * 根据类型获取Bean</div><div class="line">    * @param clazz</div><div class="line">    * @param &lt;T&gt;</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static &lt;T&gt; T getBean(Class&lt;T&gt; clazz) &#123;</div><div class="line">       checkApplicationContext();</div><div class="line">       return (T) applicationContext.getBeansOfType(clazz);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   /**</div><div class="line">    * 根据name获取bean</div><div class="line">    * @param name</div><div class="line">    * @param &lt;T&gt;</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static &lt;T&gt; T getBean(String name) &#123;</div><div class="line">       checkApplicationContext();</div><div class="line">       return (T) applicationContext.getBean(name);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   private static void checkApplicationContext() &#123;</div><div class="line">       if (applicationContext == null) &#123;</div><div class="line">           throw new IllegalStateException(&quot;applicaitonContext未注入,请在applicationContext.xml中定义ApplicationContextUtil&quot;);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
-<h3 id="spring配置注入该类"><a href="#spring配置注入该类" class="headerlink" title="spring配置注入该类"></a>spring配置注入该类</h3><p>把这个类的生命周期加入到spring中就可以了。<br>使用时只需要用applicationContext.getBean方法就可以取出spring管理的bean了。。<br>O(∩_∩)O哈哈~是不是很方便</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-BeanCopy" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/02/01/BeanCopy/" class="article-date">
-      <time datetime="2017-02-01T06:03:14.000Z" itemprop="datePublished">2017-02-01</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>新年了，先祝大家新年好呀…<br>苦逼的程序员又在写博客了。。。<br>这次记录一下一个小工具。。</p>
-<h2 id="不同的Model之间拷贝来拷贝去"><a href="#不同的Model之间拷贝来拷贝去" class="headerlink" title="不同的Model之间拷贝来拷贝去"></a>不同的Model之间拷贝来拷贝去</h2><p>有个小工具可以方便不同层之间相同参数的Model拷贝来拷贝去，其pom文件为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!--Dozer--&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;net.sf.dozer&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;dozer&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;$&#123;dozer.version&#125;&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
-<p>先声明一个类，持有Dozer单例, 避免重复创建DozerMapper消耗资源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private static DozerBeanMapper dozer = new DozerBeanMapper();</div></pre></td></tr></table></figure></p>
-<h3 id="覆盖式拷贝"><a href="#覆盖式拷贝" class="headerlink" title="覆盖式拷贝"></a>覆盖式拷贝</h3><p>用source里的参数覆盖目标的同名参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public static void copy(Object source, Object toObj) &#123;</div><div class="line">    if (null != source) &#123;</div><div class="line">        dozer.map(source, toObj);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="转化式拷贝"><a href="#转化式拷贝" class="headerlink" title="转化式拷贝"></a>转化式拷贝</h3><p>new一个Object，然后把相同的参数用source里的参数赋值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public static &lt;T&gt; T objConvert(Object obj, Class&lt;T&gt; toObj) &#123;</div><div class="line">    if (null == obj) &#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">    return dozer.map(obj, toObj);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="更新式拷贝"><a href="#更新式拷贝" class="headerlink" title="更新式拷贝"></a>更新式拷贝</h3><p>自己写的反射。。为null时，不copy<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 用信息Object中不为null的字段对目标Object进行更新</div><div class="line"> * @param infoObject 信息Object</div><div class="line"> * @param targetObject 目标Object</div><div class="line"> */</div><div class="line">public static void objUpdate(Object infoObject, Object targetObject)&#123;</div><div class="line">	Field[] infoFields = infoObject.getClass().getDeclaredFields();</div><div class="line">	Field[] targetFields = targetObject.getClass().getDeclaredFields();</div><div class="line">	try &#123;</div><div class="line">		for (Field info:infoFields) &#123;</div><div class="line">			info.setAccessible(true);</div><div class="line">			if (info.get(infoObject) != null &amp;&amp; !info.getName().equals(&quot;serialVersionUID&quot;) )&#123;</div><div class="line">				for (Field target:targetFields) &#123;</div><div class="line">					target.setAccessible(true);</div><div class="line">					if (target.getName() == info.getName())&#123;</div><div class="line">						target.set(targetObject,info.get(infoObject));</div><div class="line">						break;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125; catch (IllegalAccessException e) &#123;</div><div class="line">		e.printStackTrace();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bean/">bean</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mapper/">mapper</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-web框架理解" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-web框架理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2017/01/12/web框架理解/" class="article-date">
@@ -539,12 +271,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/12/web框架理解/">web框架理解</a>
+    <h1 class="article-title" itemprop="name">
+      web框架理解
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/framework/">framework</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -597,23 +340,76 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/framework/">framework</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/02/01/BeanCopy/">
+                    BeanCopy的小工具Dozer
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/01/06/dubbo2/">
+                    dubbo配置
+                </a>
+            </div>
+        
+    </nav>
+
   
 </article>
 
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#入口"><span class="toc-number">1.</span> <span class="toc-text">入口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载类"><span class="toc-number">2.</span> <span class="toc-text">加载类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IOC控制反转"><span class="toc-number">3.</span> <span class="toc-text">IOC控制反转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖注入DI"><span class="toc-number">4.</span> <span class="toc-text">依赖注入DI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求映射"><span class="toc-number">5.</span> <span class="toc-text">请求映射</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number"></span> <span class="toc-text">总结</span></a>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"web框架理解　| 云卷云舒　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
 
 
 
@@ -621,13 +417,54 @@
 
 
 
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2017/01/12/web框架理解/" data-title="web框架理解" data-url="https://lty6429.github.io/2017/01/12/web框架理解/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"null"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
 
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/02/01/BeanCopy/" title="上一篇: BeanCopy的小工具Dozer">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/01/06/dubbo2/" title="下一篇: dubbo配置">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/12/web框架理解/">web框架理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/dubbo2/">dubbo配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/03/代理模式/">代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/28/搜罗的书籍/">搜罗了一些书籍，记录一下找机会阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/23/windows-安装zookeeper/">windows 安装zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/dubbo1/">dubbo理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/http协议解释/">http协议解释</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/shiro加密加盐/">shiro加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">spring,springmvc,mybatis,shiro集成5</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">spring,springmvc,mybatis,shiro集成4</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">spring,springmvc,mybatis,shiro集成3</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成2/">spring,springmvc,mybatis,shiro集成2</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成1/">spring,springmvc,mybatis,shiro集成(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/linux安装java/">linux安装java</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/redis命令/">redis命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/redis集群/">redis集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/linux安装redis/">linux下安装redis</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">

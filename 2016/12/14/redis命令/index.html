@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lty" />
+
+
+
+<meta name="description" content="看了几天的redis了，把它的命令整理一下
+连接操作相关的命令12quit：关闭连接（connection）auth：简单密码认证
+持久化1234save：将数据同步保存到磁盘bgsave：将数据异步保存到磁盘lastsave：返回上次成功将数据保存到磁盘的Unix时戳shundown：将数据同步保存到磁盘，然后关闭服务
+远程服务控制1234info：提供服务器的信息和统计monitor：实时转储">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis命令">
+<meta property="og:url" content="https://lty6429.github.io/2016/12/14/redis命令/index.html">
+<meta property="og:site_name" content="云卷云舒">
+<meta property="og:description" content="看了几天的redis了，把它的命令整理一下
+连接操作相关的命令12quit：关闭连接（connection）auth：简单密码认证
+持久化1234save：将数据同步保存到磁盘bgsave：将数据异步保存到磁盘lastsave：返回上次成功将数据保存到磁盘的Unix时戳shundown：将数据同步保存到磁盘，然后关闭服务
+远程服务控制1234info：提供服务器的信息和统计monitor：实时转储">
+<meta property="og:updated_time" content="2016-12-14T01:33:58.789Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis命令">
+<meta name="twitter:description" content="看了几天的redis了，把它的命令整理一下
+连接操作相关的命令12quit：关闭连接（connection）auth：简单密码认证
+持久化1234save：将数据同步保存到磁盘bgsave：将数据异步保存到磁盘lastsave：返回上次成功将数据保存到磁盘的Unix时戳shundown：将数据同步保存到磁盘，然后关闭服务
+远程服务控制1234info：提供服务器的信息和统计monitor：实时转储">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="云卷云舒" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>redis命令 | 云卷云舒</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/my.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lty</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">闲看庭前花开花落</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collection/">Collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/List/">List</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bean/">bean</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/book/">book</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cluster/">cluster</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/convert/">convert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/framework/">framework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper/">mapper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">有些地方可能不是很准确...可以说出来哟，但是不能打我O(∩_∩)O~~~</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lty</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/my.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lty</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">闲看庭前花开花落</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/lty6429" title="GitHub"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="http://blog.csdn.net/lty6429/article/details/53517888" title="CSDN"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-redis命令" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/14/redis命令/" class="article-date">
+      <time datetime="2016-12-14T01:26:55.000Z" itemprop="datePublished">2016-12-14</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis命令
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>看了几天的redis了，把它的命令整理一下</p>
+<h3 id="连接操作相关的命令"><a href="#连接操作相关的命令" class="headerlink" title="连接操作相关的命令"></a>连接操作相关的命令</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">quit：关闭连接（connection）</div><div class="line">auth：简单密码认证</div></pre></td></tr></table></figure>
+<h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">save：将数据同步保存到磁盘</div><div class="line">bgsave：将数据异步保存到磁盘</div><div class="line">lastsave：返回上次成功将数据保存到磁盘的Unix时戳</div><div class="line">shundown：将数据同步保存到磁盘，然后关闭服务</div></pre></td></tr></table></figure>
+<h3 id="远程服务控制"><a href="#远程服务控制" class="headerlink" title="远程服务控制"></a>远程服务控制</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">info：提供服务器的信息和统计</div><div class="line">monitor：实时转储收到的请求</div><div class="line">slaveof：改变复制策略设置</div><div class="line">config：在运行时配置Redis服务器</div></pre></td></tr></table></figure>
+<h3 id="对value操作的命令"><a href="#对value操作的命令" class="headerlink" title="对value操作的命令"></a>对value操作的命令</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">exists(key)：确认一个key是否存在</div><div class="line">del(key)：删除一个<span class="function">key</span></div><div class="line"><span class="title">type</span><span class="params">(key)</span>：返回值的类型</div><div class="line"><span class="title">keys</span><span class="params">(pattern)</span>：返回满足给定pattern的所有key</div><div class="line">randomkey：随机返回key空间的一个</div><div class="line"><span class="title">keyrename</span><span class="params">(oldname, newname)</span>：重命名key</div><div class="line">dbsize：返回当前数据库中key的数目</div><div class="line">expire：设定一个key的活动时间（s）</div><div class="line">ttl：获得一个key的活动时间</div><div class="line"><span class="title">select</span><span class="params">(index)</span>：按索引查询</div><div class="line"><span class="title">move</span><span class="params">(key, dbindex)</span>：移动当前数据库中的key到dbindex数据库</div><div class="line">flushdb：删除当前选择数据库中的所有key</div><div class="line">flushall：删除所有数据库中的所有key</div></pre></td></tr></table></figure>
+<h3 id="对String操作的命令"><a href="#对String操作的命令" class="headerlink" title="对String操作的命令"></a>对String操作的命令</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">set(key, value)：给数据库中名称为key的string赋予值<span class="function">value</span></div><div class="line"><span class="title">get</span><span class="params">(key)</span>：返回数据库中名称为key的string的value</div><div class="line"><span class="title">getset</span><span class="params">(key, value)</span>：给名称为key的string赋予上一次的value</div><div class="line"><span class="title">mget</span><span class="params">(key1, key2,…, key N)</span>：返回库中多个string的value</div><div class="line"><span class="title">setnx</span><span class="params">(key, value)</span>：添加string，名称为key，值为value</div><div class="line"><span class="title">setex</span><span class="params">(key, time, value)</span>：向库中添加string，设定过期时间time</div><div class="line"><span class="title">mset</span><span class="params">(key N, value N)</span>：批量设置多个string的值</div><div class="line"><span class="title">msetnx</span><span class="params">(key N, value N)</span>：如果所有名称为key i的string都不存在</div><div class="line"><span class="title">incr</span><span class="params">(key)</span>：名称为key的string增1操作</div><div class="line"><span class="title">incrby</span><span class="params">(key, integer)</span>：名称为key的string增加integer</div><div class="line"><span class="title">decr</span><span class="params">(key)</span>：名称为key的string减1操作</div><div class="line"><span class="title">decrby</span><span class="params">(key, integer)</span>：名称为key的string减少integer</div><div class="line"><span class="title">append</span><span class="params">(key, value)</span>：名称为key的string的值附加value</div><div class="line"><span class="title">substr</span><span class="params">(key, start, end)</span>：返回名称为key的string的value的子串</div></pre></td></tr></table></figure>
+<h3 id="对List操作的命令"><a href="#对List操作的命令" class="headerlink" title="对List操作的命令"></a>对List操作的命令</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">rpush(key, value)：在名称为key的list尾添加一个值为value的元素</div><div class="line">lpush(key, value)：在名称为key的list头添加一个值为value的 元素</div><div class="line">llen(key)：返回名称为key的list的长度</div><div class="line">lrange(key, start, end)：返回名称为key的list中start至end之间的元素</div><div class="line">ltrim(key, start, end)：截取名称为key的<span class="function">list</span></div><div class="line"><span class="title">lindex</span><span class="params">(key, index)</span>：返回名称为key的list中index位置的元素</div><div class="line"><span class="title">lset</span><span class="params">(key, index, value)</span>：给名称为key的list中index位置的元素赋值</div><div class="line"><span class="title">lrem</span><span class="params">(key, count, value)</span>：删除count个key的list中值为value的元素</div><div class="line"><span class="title">lpop</span><span class="params">(key)</span>：返回并删除名称为key的list中的首元素</div><div class="line"><span class="title">rpop</span><span class="params">(key)</span>：返回并删除名称为key的list中的尾元素</div><div class="line"><span class="title">blpop</span><span class="params">(key1, key2,… key N, timeout)</span>：lpop命令的block版本。</div><div class="line"><span class="title">brpop</span><span class="params">(key1, key2,… key N, timeout)</span>：rpop的block版本。</div><div class="line"><span class="title">rpoplpush</span><span class="params">(srckey, dstkey)</span>：返回并删除名称为srckey的list的尾元素，并将该元素添加到名称为dstkey的list的头部</div></pre></td></tr></table></figure>
+<h3 id="对Set操作的命令"><a href="#对Set操作的命令" class="headerlink" title="对Set操作的命令"></a>对Set操作的命令</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sadd(key, member)：向名称为key的set中添加元素<span class="function">member</span></div><div class="line"><span class="title">srem</span><span class="params">(key, member)</span> ：删除名称为key的set中的元素member</div><div class="line"><span class="title">spop</span><span class="params">(key)</span> ：随机返回并删除名称为key的set中一个元素</div><div class="line"><span class="title">smove</span><span class="params">(srckey, dstkey, member)</span> ：移到集合元素</div><div class="line"><span class="title">scard</span><span class="params">(key)</span> ：返回名称为key的set的基数</div><div class="line"><span class="title">sismember</span><span class="params">(key, member)</span> ：member是否是名称为key的set的元素</div><div class="line"><span class="title">sinter</span><span class="params">(key1, key2,…key N)</span> ：求交集</div><div class="line"><span class="title">sinterstore</span><span class="params">(dstkey, (keys)</span>) ：求交集并将交集保存到dstkey的集合</div><div class="line"><span class="title">sunion</span><span class="params">(key1, (keys)</span>) ：求并集</div><div class="line"><span class="title">sunionstore</span><span class="params">(dstkey, (keys)</span>) ：求并集并将并集保存到dstkey的集合</div><div class="line"><span class="title">sdiff</span><span class="params">(key1, (keys)</span>) ：求差集</div><div class="line"><span class="title">sdiffstore</span><span class="params">(dstkey, (keys)</span>) ：求差集并将差集保存到dstkey的集合</div><div class="line"><span class="title">smembers</span><span class="params">(key)</span> ：返回名称为key的set的所有元素</div><div class="line"><span class="title">srandmember</span><span class="params">(key)</span> ：随机返回名称为key的set的一个元素</div></pre></td></tr></table></figure>
+<h3 id="对Hash操作的命令"><a href="#对Hash操作的命令" class="headerlink" title="对Hash操作的命令"></a>对Hash操作的命令</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">hset(key, field, value)：向名称为key的hash中添加元素<span class="function">field</span></div><div class="line"><span class="title">hget</span><span class="params">(key, field)</span>：返回名称为key的hash中field对应的value</div><div class="line"><span class="title">hmget</span><span class="params">(key, (fields)</span>)：返回名称为key的hash中field i对应的value</div><div class="line"><span class="title">hmset</span><span class="params">(key, (fields)</span>)：向名称为key的hash中添加元素field </div><div class="line"><span class="title">hincrby</span><span class="params">(key, field, integer)</span>：将名称为key的hash中field的value增加integer</div><div class="line"><span class="title">hexists</span><span class="params">(key, field)</span>：名称为key的hash中是否存在键为field的域</div><div class="line"><span class="title">hdel</span><span class="params">(key, field)</span>：删除名称为key的hash中键为field的域</div><div class="line"><span class="title">hlen</span><span class="params">(key)</span>：返回名称为key的hash中元素个数</div><div class="line"><span class="title">hkeys</span><span class="params">(key)</span>：返回名称为key的hash中所有键</div><div class="line"><span class="title">hvals</span><span class="params">(key)</span>：返回名称为key的hash中所有键对应的value</div><div class="line"><span class="title">hgetall</span><span class="params">(key)</span>：返回名称为key的hash中所有的键（field）及其对应的value</div></pre></td></tr></table></figure>
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CLUSTER INFO 打印集群的信息  </div><div class="line">CLUSTER NODES 列出集群当前已知的所有节点（node），以及这些节点的相关信息。</div></pre></td></tr></table></figure>
+<h3 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CLUSTER MEET &lt;ip&gt; &lt;port&gt; 将 ip 和 port 所指定的节点添加到集群当中，让它成为集群的一份子。  </div><div class="line">CLUSTER FORGET &lt;node_id&gt; 从集群中移除 node_id 指定的节点。  </div><div class="line">CLUSTER REPLICATE &lt;node_id&gt; 将当前节点设置为 node_id 指定的节点的从节点。  </div><div class="line">CLUSTER SAVECONFIG 将节点的配置文件保存到硬盘里面。</div></pre></td></tr></table></figure>
+<h3 id="槽-slot"><a href="#槽-slot" class="headerlink" title="槽(slot)"></a>槽(slot)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CLUSTER ADDSLOTS &lt;slot&gt; [slot ...] 将一个或多个槽（slot）指派（assign）给当前节点。  </div><div class="line">CLUSTER DELSLOTS &lt;slot&gt; [slot ...] 移除一个或多个槽对当前节点的指派。  </div><div class="line">CLUSTER FLUSHSLOTS 移除指派给当前节点的所有槽，让当前节点变成一个没有指派任何槽的节点。  </div><div class="line">CLUSTER SETSLOT &lt;slot&gt; NODE &lt;node_id&gt; 将槽 slot 指派给 node_id 指定的节点，如果槽已经指派给另一个节点，那么先让另一个节点删除该槽&gt;，然后再进行指派。  </div><div class="line">CLUSTER SETSLOT &lt;slot&gt; MIGRATING &lt;node_id&gt; 将本节点的槽 slot 迁移到 node_id 指定的节点中。  </div><div class="line">CLUSTER SETSLOT &lt;slot&gt; IMPORTING &lt;node_id&gt; 从 node_id 指定的节点中导入槽 slot 到本节点。  </div><div class="line">CLUSTER SETSLOT &lt;slot&gt; STABLE 取消对槽 slot 的导入（<span class="keyword">import</span>）或者迁移（migrate）。</div></pre></td></tr></table></figure>
+<h3 id="键"><a href="#键" class="headerlink" title="键"></a>键</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CLUSTER KEYSLOT &lt;key&gt; 计算键 key 应该被放置在哪个槽上。  </div><div class="line">CLUSTER COUNTKEYSINSLOT &lt;slot&gt; 返回槽 slot 目前包含的键值对数量。  </div><div class="line">CLUSTER GETKEYSINSLOT &lt;slot&gt; &lt;count&gt; 返回 count 个 slot 槽中的键。</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/12/14/linux安装java/">
+                    linux安装java
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/12/13/redis集群/">
+                    redis集群
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接操作相关的命令"><span class="toc-number">1.</span> <span class="toc-text">连接操作相关的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#持久化"><span class="toc-number">2.</span> <span class="toc-text">持久化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#远程服务控制"><span class="toc-number">3.</span> <span class="toc-text">远程服务控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对value操作的命令"><span class="toc-number">4.</span> <span class="toc-text">对value操作的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对String操作的命令"><span class="toc-number">5.</span> <span class="toc-text">对String操作的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对List操作的命令"><span class="toc-number">6.</span> <span class="toc-text">对List操作的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对Set操作的命令"><span class="toc-number">7.</span> <span class="toc-text">对Set操作的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对Hash操作的命令"><span class="toc-number">8.</span> <span class="toc-text">对Hash操作的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集群"><span class="toc-number">9.</span> <span class="toc-text">集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点"><span class="toc-number">10.</span> <span class="toc-text">节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#槽-slot"><span class="toc-number">11.</span> <span class="toc-text">槽(slot)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#键"><span class="toc-number">12.</span> <span class="toc-text">键</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"redis命令　| 云卷云舒　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2016/12/14/redis命令/" data-title="redis命令" data-url="https://lty6429.github.io/2016/12/14/redis命令/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"null"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
+
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/12/14/linux安装java/" title="上一篇: linux安装java">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/12/13/redis集群/" title="下一篇: redis集群">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/数据库存储IPv4/">数据库存储IPv4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/ArrayList和LinkedList的区别/">ArrayList和LinkedList的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/动态获取spring管理的bean/">动态获取spring管理的bean</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/01/BeanCopy/">BeanCopy的小工具Dozer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/12/web框架理解/">web框架理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/dubbo2/">dubbo配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/03/代理模式/">代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/28/搜罗的书籍/">搜罗了一些书籍，记录一下找机会阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/23/windows-安装zookeeper/">windows 安装zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/dubbo1/">dubbo理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/http协议解释/">http协议解释</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/shiro加密加盐/">shiro加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成5/">spring,springmvc,mybatis,shiro集成5</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成4/">spring,springmvc,mybatis,shiro集成4</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成3/">spring,springmvc,mybatis,shiro集成3</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成2/">spring,springmvc,mybatis,shiro集成2</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/spring-springmvc-mybatis-shiro集成1/">spring,springmvc,mybatis,shiro集成(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/linux安装java/">linux安装java</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/redis命令/">redis命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/redis集群/">redis集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/linux安装redis/">linux下安装redis</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 lty
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
